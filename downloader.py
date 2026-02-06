@@ -1,6 +1,7 @@
 import requests
 import os
 import sys
+import time
 
 # --- LIVE SEARCH UTILITY (Now with Reverse Search) ---
 def get_char():
@@ -78,10 +79,13 @@ def download_file(url, save_path):
         print(f"\n❌ Error: {e}")
         return 1
 
-def download(url, save, comp, sub, years, types):
+def download(url, save, comp, sub, years, types, exc3):
     print("Years being downloaded: " + str(years))
     season = ["m", "s", "w"]
     parts = ["1", "2", "3", "4", "5"]
+    if(exc3=="Y"):
+        parts = ["1", "2", "4", "5"]
+    
     for i in range(len(season)):
         urll = url + season[i]
         for j in range(len(years)):
@@ -148,6 +152,10 @@ while True:
     yearF = input("Enter final year [NUMBER ONLY]: ")
     if yearF == "-1": continue
 
+    # 5. exclude p3
+    exc3 = input("Exclude 3rd paper?(Y/N) [Some subs have repeated 3rd session papers(11,13 same)] ")
+    if exc3 == "-1": continue
+
     types= input("MS,QP or both? ['MS','QP','BOTH']").lower()
     # All inputs collected, exit the while loop to start downloading
     break
@@ -161,4 +169,4 @@ for i in range(yS, yF + 1):
     year.append(str(i)[-2:])
 
 url = "https://pastpapers.papacambridge.com/directories/CAIE/CAIE-pastpapers/upload/" + sub + "_"
-download(url, save, comp, sub, year, types)
+download(url, save, comp, sub, year, types, exc3)
